@@ -182,17 +182,17 @@ int infect_elf64(t_target *target)
 
     free(handler);
 
-    // create woody
-    int woody_fd = -1;
-    if ((woody_fd = open(PATCH, (O_CREAT | O_WRONLY | O_TRUNC), 0755)) == -1)
+    // create patch
+    int patch_fd = -1;
+    if ((patch_fd = open(PATCH, (O_CREAT | O_WRONLY | O_TRUNC), 0755)) == -1)
         return write_error(PATCH, NULL);
 
-    // dump file into woody
+    // dump file into patch
     int ret = 0;
-    if (write(woody_fd, target->base, target->filesz) == -1)
+    if (write(patch_fd, target->base, target->filesz) == -1)
         ret = write_error(PATCH, NULL);
 
-    close(woody_fd);
+    close(patch_fd);
 
     return ret;
 }
