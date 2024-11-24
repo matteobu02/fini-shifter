@@ -115,7 +115,10 @@ static uint8_t inject(Elf64_Ehdr *elf, void *payload, uint64_t payloadsz)
     {
         /* Patch _fini dynamic address */
         if (dyn_tab[i].d_un.d_ptr == old_fini_off)
+        {
             dyn_tab[i].d_un.d_ptr = new_fini_off;
+            break;
+        }
     }
 
     /* Find .symtab section */
