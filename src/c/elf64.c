@@ -108,8 +108,15 @@ static uint8_t inject(Elf64_Ehdr *elf, void *payload, uint64_t payloadsz)
     if (!dyn_sect)
         return 1;
 
-    /* Patch _fini offset in .dynamic */
-    patch_payload_addr64((void*)elf + dyn_sect->sh_offset, dyn_sect->sh_size, old_fini_off, new_fini_off);
+    /* Find _fini entry in .dynamic */
+    Elf64_Dyn *dyn_tab = (Elf64_Dyn *)((void*)elf + dyn_sect->sh_offset);
+    const uint64_t dyn_num = dyn_sect->sh_size / dyn_sect->sh_entsize;
+    for (uint64_t i = 0; i < dyn_num; ++i)
+    {
+        /* Patch _fini dynamic address */
+        if (dyn_tab[i].d_un.d_ptr == old_fini_off)
+            dyn_tab[i].d_un.d_ptr = new_fini_off;
+    }
 
     /* Find .symtab section */
     Elf64_Shdr *sym_sect = NULL;

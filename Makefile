@@ -1,4 +1,4 @@
-NAME		=	infector
+NAME		=	shifter
 
 UNAME		=	$(shell uname)
 
